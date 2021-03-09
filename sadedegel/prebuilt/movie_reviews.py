@@ -34,7 +34,6 @@ def cv(k=3):
 
     raw = load_movie_sentiment_train()
     df = pd.DataFrame.from_records(raw)
-    df = pd.read_csv(Path(dirname(__file__)) / 'turkish_movie_sentiment_dataset.csv') ###!
 
     BATCH_SIZE = 2000
 
@@ -74,8 +73,6 @@ def build():
 
     raw = load_movie_sentiment_train()
     df = pd.DataFrame.from_records(raw)
-
-    df = pd.read_csv(Path(dirname(__file__)) / 'turkish_movie_sentiment_dataset.csv' ) ###!
     df = shuffle(df)
 
     BATCH_SIZE = 2000
@@ -115,8 +112,6 @@ def evaluate():
 
     raw_test = load_movie_sentiment_test()
     test = pd.DataFrame.from_records(raw_test)
-
-    test = pd.read_csv(Path(dirname(__file__)) / 'turkish_movie_sentiment_dataset_test.csv')
 
     y_pred = model.predict(test.comment)
 
