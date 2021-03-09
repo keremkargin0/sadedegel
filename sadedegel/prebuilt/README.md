@@ -78,3 +78,28 @@ y_pred = model.predict([])
 Current prebuilt model has 
 * 3-fold cross validation F1 macro score of `mean 0.7946, std 0.0043)`.
 * 5-fold cross validation F1 macro score of `mean 0.7989, std 0.0055)` 
+
+### Turkish Movie Reviews Sentiment Classification
+Classifier assigns each Turkish movie review into one of the classes (0: 'NEGATIVE', 1: 'POSITIVE') by using sadedegel built-in pipeline.
+
+#### How to Use:
+
+```python
+from sadedegel.prebuilt import movie_reviews
+# We load our prebuilt model:
+model = movie_reviews.load()
+
+# Here we enter our text to get sentiment predictions.
+y_pred = model.predict([])
+
+# Here we can get cross validation score.
+movie_reviews.cv()
+
+# Here we can get evaluation score on test data.
+movie_reviews.evaluate()
+```
+#### Results
+
+Current prebuilt model has
+* 3-fold cross validation F1 macro score of `mean: 0.7746 std: 0.0035`
+* On test set model has an F1 macro score of `0.7799`
