@@ -38,11 +38,11 @@ def cv(k=3):
     BATCH_SIZE = 2000
 
     kf = StratifiedKFold(n_splits=k, random_state=42, shuffle=True)
-    console.log(f"Corpus Size: {len(df)}")
+    console.log(f"Corpus Size: {CORPUS_SIZE}")
 
     scores = []
 
-    for train_indx, test_index in kf.split(df.comment, df.sentiment_class):
+    for train_indx, test_index in kf.split(df.text, df.sentiment_class):
         train = df.iloc[train_indx]
         test = df.iloc[test_index]
 
@@ -54,10 +54,10 @@ def cv(k=3):
         pipeline = empty_model()
 
         for batch in batches:
-            pipeline.partial_fit(batch.comment, batch.sentiment_class,
+            pipeline.partial_fit(batch.text, batch.sentiment_class,
                                  classes=df.sentiment_class.unique().tolist())
 
-        y_pred = pipeline.predict(test.comment)
+        y_pred = pipeline.predict(test.text)
 
         scores.append(f1_score(test.sentiment_class, y_pred, average='macro'))
 
@@ -77,7 +77,7 @@ def build():
 
     BATCH_SIZE = 2000
 
-    console.log(f"Corpus Size: {len(df)}")
+    console.log(f"Corpus Size: {CORPUS_SIZE}")
 
     n_split = ceil(len(df) / BATCH_SIZE)
     console.log(f"{n_split} batches of {BATCH_SIZE} instances...")
@@ -87,7 +87,7 @@ def build():
     pipeline = empty_model()
 
     for batch in batches:
-        pipeline.partial_fit(batch.comment, batch.sentiment_class,
+        pipeline.partial_fit(batch.text, batch.sentiment_class,
                              classes=df.sentiment_class.unique().tolist())
 
     console.log("Model build [green]DONE[/green]")
@@ -113,9 +113,11 @@ def evaluate():
     raw_test = load_movie_sentiment_test()
     test = pd.DataFrame.from_records(raw_test)
 
-    y_pred = model.predict(test.comment)
+    true_labels = pd.DataFrame.from_records(load_movie_sentiment_target)
 
-    console.log(f"Model test accuracy (f1-macro): {f1_score(test.sentiment_class, y_pred, average='macro')}")
+    y_pred = model.predict(test.text)
+
+    console.log(f"Model test accuracy (f1-macro): {f1_score(true_labels.sentiment_class, y_pred, average='macro')}")
 
 
 if __name__ == '__main__':
